@@ -3,7 +3,10 @@ import { ArrowRight, Brain, Calendar } from "lucide-react";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero noise">
+    <section
+  id="register-section"   // <-- Ye add kar do
+  className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero noise"
+>
       {/* Grid Background */}
       <div className="absolute inset-0 bg-grid-pattern opacity-50" />
       <div className="container mx-auto px-4 md:px-6 relative z-10 pt-20">

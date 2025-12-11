@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Menu, X, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom"; // <-- routing import
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate(); // <-- navigate hook
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,7 +64,11 @@ const Navbar = () => {
             <Button variant="ghost" size="sm">
               Sign In
             </Button>
-            <Button variant="hero" size="sm">
+            <Button
+              variant="hero"
+              size="sm"
+              onClick={() => navigate("/register")} // <-- routing added
+            >
               Register
             </Button>
           </div>
@@ -92,7 +98,12 @@ const Navbar = () => {
               ))}
               <div className="flex flex-col gap-3 pt-4 border-t border-border">
                 <Button variant="ghost">Sign In</Button>
-                <Button variant="hero">Get Started Free</Button>
+                <Button
+                  variant="hero"
+                  onClick={() => navigate("/register")} // <-- routing added
+                >
+                  Get Started Free
+                </Button>
               </div>
             </div>
           </div>
