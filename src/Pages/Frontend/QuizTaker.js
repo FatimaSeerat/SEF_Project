@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { CheckCircle, XCircle, ChevronRight, ChevronLeft } from "lucide-react";
+import { Button } from "../../components/UI/button";
+import { CheckCircle, ChevronRight, ChevronLeft } from "lucide-react";
 
 export default function QuizTaker({ questions, quizType, onComplete }) {
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -1,13 +1,15 @@
 import { Routes, Route } from "react-router-dom"; // <-- Import Routes
-import Navbar from "./components/landing/Navbar";
-import HeroSection from "./components/landing/HeroSection";
-import FeaturesSection from "./components/landing/FeaturesSection";
-import HowItWorksSection from "./components/landing/HowItWorksSection";
-import FAQSection from "./components/landing/FAQSection";
-import Footer from "./components/landing/Footer";
-import Auth from "./components/pages/Auth"; // <-- Auth page
-import Dashboard from "./components/pages/Dashboard";
-import QuizGenerator from "./components/pages/QuizGenerator";
+import Navbar from "./components/PageChrome/Navbar";
+import Footer from "./components/PageChrome/Footer";
+import Dashboard from "./Pages/Dashboard/Dashboard";
+import QuizGenerator from "./Pages/Frontend/QuizGenerator";
+import TimeTable from "./Pages/Frontend/TimeTable";
+import HeroSection from "./Pages/Frontend/Home/HeroSection";
+import FeaturesSection from "./Pages/Frontend/Home/FeaturesSection";
+import HowItWorksSection from "./Pages/Frontend/Home/HowItWorksSection";
+import FAQSection from "./Pages/Frontend/Home/FAQSection";
+import Login from "./Pages/Auth/Login";
+import Register from "./Pages/Auth/Register";
 
 const App = () => {
   return (
@@ -28,11 +30,11 @@ const App = () => {
           </>
         }
       />
-
-      {/* Register / Auth Page */}
-      <Route path="/register" element={<Auth />} />
+      <Route path="/auth" element={<Login />} />
+      <Route path="/auth/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/quiz" element={<QuizGenerator />} />
+      <Route path="/timetable" element={<TimeTable />} />
 
     </Routes>
   );
