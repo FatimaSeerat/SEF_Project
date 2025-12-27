@@ -100,8 +100,16 @@ export default function Dashboard() {
               Quiz<span className="text-[#68369B]">Hub</span> AI
             </span>
           </Link>
-
           <div className="flex items-center gap-3">
+            <div className="flex items-right gap-3">
+              <Button
+                variant="hero"
+                size="sm"
+                onClick={() => navigate("/")}
+              >
+                Home
+              </Button>
+            </div>
             <Button
               onClick={handleSignOut}
               className="bg-white/60 hover:bg-white/80 text-[#68369B] border border-[#9D64CF]/30 rounded-lg px-4 py-2 font-medium text-sm transition-all"
@@ -234,11 +242,10 @@ export default function Dashboard() {
                     >
                       <div className="flex items-center gap-4">
                         <div
-                          className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                            quiz.status === "completed"
-                              ? "bg-gradient-to-br from-green-400 to-green-500"
-                              : "bg-gradient-to-br from-yellow-400 to-orange-400"
-                          }`}
+                          className={`w-12 h-12 rounded-xl flex items-center justify-center ${quiz.status === "completed"
+                            ? "bg-gradient-to-br from-green-400 to-green-500"
+                            : "bg-gradient-to-br from-yellow-400 to-orange-400"
+                            }`}
                         >
                           {quiz.status === "completed" ? (
                             <Trophy className="w-6 h-6 text-white" />
@@ -317,7 +324,7 @@ export default function Dashboard() {
                     </span>
                   </div>
                   <div className="w-full h-2 bg-[#D4C0E9] rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className="h-full bg-gradient-to-r from-[#68369B] to-[#9D64CF] rounded-full transition-all"
                       style={{ width: `${quizzes.length > 0 ? (completedQuizzes.length / quizzes.length) * 100 : 0}%` }}
                     />
@@ -331,7 +338,7 @@ export default function Dashboard() {
                     </span>
                   </div>
                   <div className="w-full h-2 bg-[#D4C0E9] rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className="h-full bg-gradient-to-r from-[#9D64CF] to-[#CCB3E5] rounded-full transition-all"
                       style={{ width: `${totalQuestions ? (totalScore / totalQuestions) * 100 : 0}%` }}
                     />
@@ -354,11 +361,10 @@ export default function Dashboard() {
                 ].map((achievement, idx) => (
                   <div
                     key={idx}
-                    className={`aspect-square rounded-xl flex flex-col items-center justify-center gap-2 transition-all ${
-                      achievement.unlocked
-                        ? 'bg-gradient-to-br from-[#68369B] to-[#9D64CF] text-white shadow-lg'
-                        : 'bg-white/50 text-[#9D64CF]/30'
-                    }`}
+                    className={`aspect-square rounded-xl flex flex-col items-center justify-center gap-2 transition-all ${achievement.unlocked
+                      ? 'bg-gradient-to-br from-[#68369B] to-[#9D64CF] text-white shadow-lg'
+                      : 'bg-white/50 text-[#9D64CF]/30'
+                      }`}
                   >
                     <span className="text-2xl">{achievement.icon}</span>
                     <span className="text-xs font-medium text-center px-1">{achievement.label}</span>

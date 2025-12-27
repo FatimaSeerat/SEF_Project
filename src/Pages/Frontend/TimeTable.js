@@ -17,7 +17,19 @@ export default function TimeTable() {
     const [startTime, setStartTime] = useState("09:00");
     const [endTime, setEndTime] = useState("17:00");
     const [loading, setLoading] = useState(false);
+    const [studyDaysMode, setStudyDaysMode] = useState("weekdays");
+    const [selectedDays, setSelectedDays] = useState(["Mon", "Tue", "Wed", "Thu", "Fri"]);
     const navigate = useNavigate();
+
+    const weekDays = [
+        { initial: "M", full: "Mon" },
+        { initial: "T", full: "Tue" },
+        { initial: "W", full: "Wed" },
+        { initial: "T", full: "Thu" },
+        { initial: "F", full: "Fri" },
+        { initial: "S", full: "Sat" },
+        { initial: "S", full: "Sun" }
+    ];
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -49,6 +61,27 @@ export default function TimeTable() {
         toast.success("Course removed");
     };
 
+    const handleStudyDaysModeChange = (mode) => {
+        setStudyDaysMode(mode);
+        if (mode === "weekdays") {
+            setSelectedDays(["Mon", "Tue", "Wed", "Thu", "Fri"]);
+        } else if (mode === "allweek") {
+            setSelectedDays(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
+        }
+    };
+
+    const toggleDay = (day) => {
+        if (selectedDays.includes(day)) {
+            if (selectedDays.length > 1) {
+                setSelectedDays(selectedDays.filter(d => d !== day));
+            } else {
+                toast.error("Select at least one day");
+            }
+        } else {
+            setSelectedDays([...selectedDays, day]);
+        }
+    };
+
     const generateTimeTable = async () => {
         if (courses.length === 0) {
             toast.error("Please add at least one course");
@@ -56,7 +89,7 @@ export default function TimeTable() {
         }
 
         setLoading(true);
-        
+
         // TODO: Implement timetable generation
         setTimeout(() => {
             toast.info("Timetable generation - Coming soon!");
@@ -67,7 +100,7 @@ export default function TimeTable() {
     if (!user) return null;
 
     const getPreferenceColor = (pref) => {
-        switch(pref) {
+        switch (pref) {
             case 'high': return 'from-[#68369B] to-[#9D64CF]';
             case 'medium': return 'from-[#9D64CF] to-[#CCB3E5]';
             case 'low': return 'from-[#CCB3E5] to-[#D4C0E9]';
@@ -80,13 +113,13 @@ export default function TimeTable() {
             {/* Header */}
             <header className="bg-white/40 backdrop-blur-md border-b border-[#68369B]/10 sticky top-0 z-50">
                 <div className="container mx-auto px-4 py-3 flex items-center justify-between max-w-6xl">
-                    <Link 
-                        to="/" 
+                    <button
+                        onClick={() => navigate(-1)}
                         className="flex items-center gap-2 text-[#68369B] hover:text-[#9D64CF] transition-colors"
                     >
                         <ArrowLeft className="w-4 h-4" />
                         <span className="font-semibold text-sm">Back</span>
-                    </Link>
+                    </button>
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#68369B] to-[#9D64CF] flex items-center justify-center">
                             <Calendar className="w-4 h-4 text-white" />
@@ -127,7 +160,7 @@ export default function TimeTable() {
                                         className="bg-white border-[#9D64CF]/30 text-[#161721] placeholder:text-[#9D64CF]/50 h-10 focus:border-[#68369B] focus:ring-1 focus:ring-[#68369B]/20 rounded-lg"
                                         onKeyPress={(e) => e.key === 'Enter' && addCourse()}
                                     />
-                                    
+
                                     <div className="flex gap-2">
                                         <div className="flex-1">
                                             <Label className="text-[#161721] text-xs font-semibold mb-2 block">
@@ -138,11 +171,10 @@ export default function TimeTable() {
                                                     <button
                                                         key={pref}
                                                         onClick={() => setPreference(pref)}
-                                                        className={`py-2 rounded-lg font-medium text-xs capitalize transition-all ${
-                                                            preference === pref
+                                                        className={`py-2 rounded-lg font-medium text-xs capitalize transition-all ${preference === pref
                                                                 ? 'bg-gradient-to-br from-[#68369B] to-[#9D64CF] text-white shadow'
                                                                 : 'bg-white border border-[#9D64CF]/30 text-[#68369B] hover:border-[#68369B]'
-                                                        }`}
+                                                            }`}
                                                     >
                                                         {pref}
                                                     </button>
@@ -167,7 +199,7 @@ export default function TimeTable() {
                                 <Label className="text-[#161721] text-sm font-semibold mb-3 block">
                                     Your Courses ({courses.length})
                                 </Label>
-                                
+
                                 {courses.length === 0 ? (
                                     <div className="text-center py-8 text-[#9D64CF]">
                                         <Calendar className="w-12 h-12 mx-auto mb-2 opacity-50" />
@@ -239,11 +271,10 @@ export default function TimeTable() {
                                                 <button
                                                     key={hours}
                                                     onClick={() => setAvailableHours(hours)}
-                                                    className={`py-2 rounded-lg font-semibold text-sm transition-all ${
-                                                        availableHours === hours
+                                                    className={`py-2 rounded-lg font-semibold text-sm transition-all ${availableHours === hours
                                                             ? 'bg-gradient-to-br from-[#68369B] to-[#9D64CF] text-white shadow'
                                                             : 'bg-white border border-[#9D64CF]/30 text-[#68369B] hover:border-[#68369B]'
-                                                    }`}
+                                                        }`}
                                                 >
                                                     {hours}h
                                                 </button>
@@ -291,16 +322,58 @@ export default function TimeTable() {
                                             Study Days
                                         </Label>
                                         <div className="space-y-2">
-                                            <button className="w-full py-2 rounded-lg font-medium text-sm transition-all bg-gradient-to-br from-[#68369B] to-[#9D64CF] text-white shadow">
+                                            <button 
+                                                onClick={() => handleStudyDaysModeChange("weekdays")}
+                                                className={`w-full py-2 rounded-lg font-medium text-sm transition-all ${
+                                                    studyDaysMode === "weekdays"
+                                                        ? 'bg-gradient-to-br from-[#68369B] to-[#9D64CF] text-white shadow'
+                                                        : 'bg-white border border-[#9D64CF]/30 text-[#68369B] hover:border-[#68369B]'
+                                                }`}
+                                            >
                                                 Weekdays Only
                                             </button>
-                                            <button className="w-full py-2 rounded-lg font-medium text-sm transition-all bg-white border border-[#9D64CF]/30 text-[#68369B] hover:border-[#68369B]">
+                                            <button 
+                                                onClick={() => handleStudyDaysModeChange("allweek")}
+                                                className={`w-full py-2 rounded-lg font-medium text-sm transition-all ${
+                                                    studyDaysMode === "allweek"
+                                                        ? 'bg-gradient-to-br from-[#68369B] to-[#9D64CF] text-white shadow'
+                                                        : 'bg-white border border-[#9D64CF]/30 text-[#68369B] hover:border-[#68369B]'
+                                                }`}
+                                            >
                                                 All Week
                                             </button>
-                                            <button className="w-full py-2 rounded-lg font-medium text-sm transition-all bg-white border border-[#9D64CF]/30 text-[#68369B] hover:border-[#68369B]">
+                                            <button 
+                                                onClick={() => handleStudyDaysModeChange("custom")}
+                                                className={`w-full py-2 rounded-lg font-medium text-sm transition-all ${
+                                                    studyDaysMode === "custom"
+                                                        ? 'bg-gradient-to-br from-[#68369B] to-[#9D64CF] text-white shadow'
+                                                        : 'bg-white border border-[#9D64CF]/30 text-[#68369B] hover:border-[#68369B]'
+                                                }`}
+                                            >
                                                 Custom
                                             </button>
                                         </div>
+
+                                        {/* Custom Days Selection */}
+                                        {studyDaysMode === "custom" && (
+                                            <div className="mt-3 pt-3 border-t border-[#9D64CF]/20">
+                                                <div className="flex justify-between gap-1">
+                                                    {weekDays.map((day, index) => (
+                                                        <button
+                                                            key={index}
+                                                            onClick={() => toggleDay(day.full)}
+                                                            className={`w-9 h-9 rounded-full font-bold text-xs transition-all ${
+                                                                selectedDays.includes(day.full)
+                                                                    ? 'bg-gradient-to-br from-[#68369B] to-[#9D64CF] text-white shadow'
+                                                                    : 'bg-white border border-[#9D64CF]/30 text-[#68369B] hover:border-[#68369B]'
+                                                            }`}
+                                                        >
+                                                            {day.initial}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
